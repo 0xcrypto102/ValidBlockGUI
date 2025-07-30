@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { invoke } from "@tauri-apps/api/core";
-import { Policy } from '../gen/proto/validblock_pb';
-import { anchorClient } from '../lib/client';
+import { AnchorRequest, Policy } from "../gen/proto/validblock_pb";
+import { anchorClient } from "../lib/client";
 
 export default function AnchorPane() {
   const [file, setFile] = useState<File | null>(null);
@@ -16,17 +16,25 @@ export default function AnchorPane() {
 
   const handleAnchor = async (policy: Policy) => {
     if (!file) return;
-    const buffer = await file.arrayBuffer();
-    const fileContent = Array.from(new Uint8Array(buffer));
-    // const fileContent = new Uint8Array(buffer);
+    // const buffer = await file.arrayBuffer();
+    // const fileContent = Array.from(new Uint8Array(buffer));
     try {
-      const res = await invoke<string>('anchor_file', {
-        fileContent,
+    //   const res = await invoke<string>('anchor_file', {
+    //     fileContent,
+    //     memo,
+    //     useOnChain: policy === Policy.ON_CHAIN,
+    //   });
+    //   setDigest(res);
+      const content = new Uint8Array(await file.arrayBuffer());
+
+      const req = new AnchorRequest({
+        fileContent: content,
         memo,
-        useOnChain: policy === Policy.ON_CHAIN,
+        policy: policy == Policy.ON_CHAIN ? Policy.ON_CHAIN : Policy.LOCAL_ONLY,
       });
-      // const res = await anchorClient.anchor({ fileContent, memo, policy });
-      setDigest(res);
+
+      const res = await anchorClient.anchor(req);
+      return res.digest;
     } catch (err) {
       alert(`Anchor failed: ${err}`);
     }

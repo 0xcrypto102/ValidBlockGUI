@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A Tauri App"
 authors = ["you"]
 edition = "2021"
-
+default-run = "gui"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
@@ -13,6 +13,10 @@ edition = "2021"
 # This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
 name = "gui_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
+
+[[bin]]
+name = "proxy"
+path = "bin/proxy.rs"
 
 [build-dependencies]
 tauri-build = { version = "2.0.0", features = [ "config-json5" ] }
@@ -26,6 +30,12 @@ tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 tonic = { version = "0.11", features = ["transport"] }
 prost = "0.12"
 uuid = { version = "1", features = ["v4"] }
-tonic-web = "0.14.0"
-tower = "0.5.2"
-hyper = { version = "0.14", features = ["full"] }
+tonic-web = "0.11.0"
+tower = "0.4"
+
+validblock-core = { path = "../validblock/crates/core" }
+validblock-storage = { path = "../validblock/crates/storage" }
+validblock-wallet = { path = "../validblock/crates/wallet" }
+validblock-types = { path = "../validblock/crates/types" }
+validblock-hasher = { path = "../validblock/crates/hasher" }
+tower-http = "0.6.6"
