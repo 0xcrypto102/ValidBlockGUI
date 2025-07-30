@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package validblock;
+
+enum Policy {
+  UNKNOWN = 0;
+  LOCAL_ONLY = 1;
+  ON_CHAIN = 2;
+}
+
+message AnchorRequest {
+  bytes file_content = 1;
+  string memo = 2;
+  Policy policy = 3;
+}
+
+
+message AnchorResponse {
+  string digest = 1;
+  int64 timestamp = 2;
+  string txid = 3;
+}
+
+message VerifyRequest {
+  bytes file_content = 1;
+}
+
+message VerifyResponse {
+  bool verified = 1;
+  string digest = 2;
+  int64 timestamp = 3;
+  string txid = 4;
+}
+
+service AnchorService {
+  rpc Anchor(AnchorRequest) returns (AnchorResponse);
+}
+
+service VerifyService {
+  rpc Verify(VerifyRequest) returns (VerifyResponse);
+}

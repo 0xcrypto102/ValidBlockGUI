@@ -1,0 +1,37 @@
+# version: v1
+# plugins:
+#   - name: es
+#     path: ./node_modules/.bin/protoc-gen-es
+#     out: src/gen
+#     opt: target=ts
+
+#   - name: connect-es
+#     path: ./node_modules/.bin/protoc-gen-connect-es
+#     out: src/gen
+#     opt: target=ts
+
+
+version: v1
+plugins:
+  # - plugin: buf.build/bufbuild/es
+  #   out: src/gen
+  #   opt: target=ts
+  - plugin: es
+    out: src/gen
+    opt: 
+      # Add more plugin options here
+      - target=ts
+  - plugin: buf.build/bufbuild/connect-es
+    out: src/gen
+    opt: target=ts
+
+
+# version: v2
+# plugins:
+#   # This will invoke protoc-gen-es and write output to src/gen
+#   - local: protoc-gen-es
+#     out: src/gen
+#     opt:
+#       # Add more plugin options here
+#       - target=ts
+
