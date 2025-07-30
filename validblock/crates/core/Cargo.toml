@@ -1,0 +1,26 @@
+[package]
+name = "validblock-core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+validblock-types = { path = "../types" }
+validblock-hasher = { path = "../hasher" }
+validblock-wallet = { path = "../wallet" }
+validblock-storage = { path = "../storage" } 
+chrono = { version = "0.4", features = ["clock"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+prost = "0.12"
+tonic = "0.11"
+
+
+
+[dev-dependencies]
+tempfile = "3.20.0" 
+
+[build-dependencies]
+tonic-build = "0.11"
+
+[[bin]]
+name = "validblock-server"
+path = "src/main.rs"

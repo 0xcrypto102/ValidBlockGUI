@@ -1,0 +1,8 @@
+[package]
+name = "validblock-wallet"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bitcoin = "0.30"
+validblock-types = { path = "../types" } 

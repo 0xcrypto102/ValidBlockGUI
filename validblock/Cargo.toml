@@ -1,0 +1,9 @@
+[workspace]
+members = [
+  "crates/types",
+  "crates/hasher",
+  "crates/wallet",
+  "crates/storage",
+  "crates/core"
+]
+resolver = "2"
