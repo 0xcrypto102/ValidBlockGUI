@@ -32,10 +32,19 @@ message VerifyResponse {
   string txid = 4;
 }
 
+message ExistDigestRequest {
+  string digest = 1; // hex or base64 encoded Digest256
+}
+
+message ExistDigestResponse {
+  bool exists = 1;
+}
+
 service AnchorService {
   rpc Anchor(AnchorRequest) returns (AnchorResponse);
 }
 
 service VerifyService {
   rpc Verify(VerifyRequest) returns (VerifyResponse);
+  rpc ExistDigest(ExistDigestRequest) returns (ExistDigestResponse); // 👈 New RPC
 }

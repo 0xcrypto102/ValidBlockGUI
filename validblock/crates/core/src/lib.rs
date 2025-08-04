@@ -48,6 +48,12 @@ impl<W: WalletAdapter> AnchorEngine<W> {
     let digest = hash_file(&path)?;
     self.repo.get(&digest)
   }
+
+  /// check whether a digest exists
+  pub fn exist_digest(&self, digest: &Digest256) -> Result<bool, VBError> {
+    Ok(self.repo.get(digest)?.is_some())
+  }
+
 }
 
 // ============================================================================

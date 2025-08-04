@@ -1,3 +1,16 @@
-@import "tailwindcss";
+@import "tailwindcss"; */
 
-@custom-variant dark (&:where(.dark, .dark *));
+/* @custom-variant dark (&:where(.dark, .dark *));
+:root {
+  --c-bg: #fafafa;
+  --c-panel: #f3f3f3;
+  --c-accent: #ffb638;
+  --c-text: #000000;
+}
+
+.dark {
+  --c-bg: #0d1117;
+  --c-panel: #161b22;
+  --c-accent: #ffb638;
+  --c-text: #e6edf3;
+ }

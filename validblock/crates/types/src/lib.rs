@@ -10,6 +10,7 @@ use thiserror::Error;
 // ============================================================================
 
 /// 32-byte digest type
+
 #[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq, Hash)]
 pub struct Digest256(pub [u8; 32]);
 

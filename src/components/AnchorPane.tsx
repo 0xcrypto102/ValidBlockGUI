@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { invoke } from "@tauri-apps/api/core";
 import { AnchorRequest, Policy } from "../gen/proto/validblock_pb";
 import { anchorClient } from "../lib/client";
+import { sha256 } from "@noble/hashes/sha256";
+import { Buffer } from 'buffer';
 
 export default function AnchorPane() {
   const [file, setFile] = useState<File | null>(null);
@@ -26,6 +28,11 @@ export default function AnchorPane() {
     //   });
     //   setDigest(res);
       const content = new Uint8Array(await file.arrayBuffer());
+      const digestHex = Buffer.from(sha256(content)).toString('hex');
+
+      // pre‑flight duplicate ask
+      // const already = await invoke<boolean>('digest_exists', { digestHex });
+      // if (already && !confirm('Digest already anchored. Anchor again?')) return;
 
       const req = new AnchorRequest({
         fileContent: content,
@@ -34,7 +41,7 @@ export default function AnchorPane() {
       });
 
       const res = await anchorClient.anchor(req);
-      return res.digest;
+      setDigest(res.digest);
     } catch (err) {
       alert(`Anchor failed: ${err}`);
     }

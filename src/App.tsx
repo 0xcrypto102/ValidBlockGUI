@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AnchorPane from './components/AnchorPane';
 import VerifyPane from './components/VerifyPane';
 import SettingsPane from './components/SettingsPane';
@@ -7,11 +7,22 @@ import { invoke } from '@tauri-apps/api/core';
 
 function App() {
   const [view, setView] = useState('anchor');
+  const [dark, setDark] = useState(
+    window.matchMedia('(prefers-color-scheme: dark)').matches,
+  );
 
   const tabClass = (tab) =>
     `px-4 py-2 rounded-md font-medium transition-colors duration-200 ${
       view === tab ? 'bg-accent-primary text-black dark:text-white' : 'bg-panel text-[#888888] hover:bg-accent-primary/30'
-    }`;
+  }`;
+
+  // hot‑toggle class on <html>
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', dark);
+  }, [dark]);
+    
+
+  
 
   return (
     <div className="bg-bg text-white min-h-screen flex flex-col">

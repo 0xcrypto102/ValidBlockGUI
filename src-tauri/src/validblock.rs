@@ -37,6 +37,19 @@ pub struct VerifyResponse {
     #[prost(string, tag = "4")]
     pub txid: ::prost::alloc::string::String,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ExistDigestRequest {
+    /// hex or base64 encoded Digest256
+    #[prost(string, tag = "1")]
+    pub digest: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ExistDigestResponse {
+    #[prost(bool, tag = "1")]
+    pub exists: bool,
+}
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum Policy {
@@ -282,6 +295,31 @@ pub mod verify_service_client {
                 .insert(GrpcMethod::new("validblock.VerifyService", "Verify"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn exist_digest(
+            &mut self,
+            request: impl tonic::IntoRequest<super::ExistDigestRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::ExistDigestResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/validblock.VerifyService/ExistDigest",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("validblock.VerifyService", "ExistDigest"));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -473,6 +511,13 @@ pub mod verify_service_server {
             &self,
             request: tonic::Request<super::VerifyRequest>,
         ) -> std::result::Result<tonic::Response<super::VerifyResponse>, tonic::Status>;
+        async fn exist_digest(
+            &self,
+            request: tonic::Request<super::ExistDigestRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::ExistDigestResponse>,
+            tonic::Status,
+        >;
     }
     #[derive(Debug)]
     pub struct VerifyServiceServer<T: VerifyService> {
@@ -584,6 +629,52 @@ pub mod verify_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = VerifySvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/validblock.VerifyService/ExistDigest" => {
+                    #[allow(non_camel_case_types)]
+                    struct ExistDigestSvc<T: VerifyService>(pub Arc<T>);
+                    impl<
+                        T: VerifyService,
+                    > tonic::server::UnaryService<super::ExistDigestRequest>
+                    for ExistDigestSvc<T> {
+                        type Response = super::ExistDigestResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::ExistDigestRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as VerifyService>::exist_digest(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ExistDigestSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

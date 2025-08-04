@@ -1,6 +1,6 @@
 [package]
 name = "validblock-core"
-version = "0.1.0"
+version = "0.3.0-alpha"
 edition = "2021"
 
 [dependencies]
@@ -20,6 +20,7 @@ tempfile = "3.20.0"
 
 [build-dependencies]
 tonic-build = "0.11"
+validblock-wallet = { path = "../wallet" }
 
 [[bin]]
 name = "validblock-server"

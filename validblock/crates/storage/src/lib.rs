@@ -95,6 +95,17 @@ impl AnchorRepo {
     self.conn.execute("PRAGMA wal_checkpoint(TRUNCATE)", []).map_err(|e| VBError::Db(e.to_string()))?;
     Ok(())
   }
+
+  /// Check if a digest exists in the DB
+  pub fn exists_digest(&self, digest: &Digest256) -> Result<bool, VBError> {
+    let mut stmt = self.conn.prepare("SELECT 1 FROM anchors WHERE digest = ?1 LIMIT 1")
+        .map_err(|e| VBError::Db(e.to_string()))?;
+
+    let mut rows = stmt.query(params![&digest.0])
+        .map_err(|e| VBError::Db(e.to_string()))?;
+
+        Ok(rows.next().map_err(|e| VBError::Db(e.to_string()))?.is_some())
+  }
 }
 
 // ============================================================================

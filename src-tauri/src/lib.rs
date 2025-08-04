@@ -1,7 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use std::sync::Mutex;
 use std::time::{SystemTime, UNIX_EPOCH};
-use tauri::{State, Manager};
+use tauri::{Emitter, Manager, State};
 use tonic::transport::Channel;
 use validblock::anchor_service_client::AnchorServiceClient;
 use validblock::verify_service_client::VerifyServiceClient;
@@ -22,7 +22,7 @@ use std::sync::Arc;
 
 use tonic::transport::Server;
 
-use validblock_core::AnchorEngine;
+use validblock_core::{AnchorEngine, Digest256};
 use validblock_storage::AnchorRepo;
 
 #[derive(Default)]
@@ -47,7 +47,7 @@ async fn anchor_file(
         return Err("Memo too long for on-chain anchor (max 47 bytes).".into());
     }
 
-    let mut client = AnchorServiceClient::connect("http://127.0.0.1:50051")
+    let mut client = AnchorServiceClient::connect("http://127.0.0.1:8080")
         .await
         .map_err(|e| format!("gRPC connection failed: {}", e))?;
 
@@ -75,7 +75,7 @@ async fn verify_file(
     file_content: Vec<u8>,
     state: State<'_, AppState>,
 ) -> Result<bool, String> {
-    let mut client = VerifyServiceClient::connect("http://127.0.0.1:50051")
+    let mut client = VerifyServiceClient::connect("http://127.0.0.1:8080")
         .await
         .map_err(|e| format!("gRPC connection failed: {}", e))?;
 
@@ -91,14 +91,23 @@ async fn verify_file(
 }
 
 #[tauri::command]
-fn toggle_trinity_mode(enable: bool, state: State<'_, AppState>) {
+fn toggle_trinity_mode(enable: bool, app: tauri::AppHandle, state: State<'_, AppState>) {
     *state.trinity_mode.lock().unwrap() = enable;
+    app.emit("trinity-mode-changed", enable).ok();
 }
 
 #[tauri::command]
 fn get_trinity_mode(state: State<'_, AppState>) -> bool {
     *state.trinity_mode.lock().unwrap()
 }
+
+// #[tauri::command]
+// pub fn digest_exists(digest_hex: String, state: State<'_, AppState>) -> Result<bool, String> {
+//     let digest = Digest256::from_str(&digest_hex).map_err(|e| e.to_string())?;
+//     let repo = &state.repo;
+//     let exists = repo.exists_digest(&digest).map_err(|e| e.to_string())?;
+//     Ok(exists)
+// }
 
 #[tauri::command]
 fn get_settings(state: State<'_, AppState>) -> Result<SettingsStore, String> {
@@ -177,6 +186,7 @@ pub fn run() {
             toggle_trinity_mode,
             get_trinity_mode,
             get_settings,
+            // digest_exists,
             put_settings,
         ])
         .run(tauri::generate_context!())

@@ -24,24 +24,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let anchor_service = AnchorServiceServer::new(AnchorServiceImpl::new(engine.clone()));
     let verify_service = VerifyServiceServer::new(VerifyServiceImpl::new(engine));
 
-    let cors = CorsLayer::new()
-        .allow_origin(Any)
-        .allow_methods(Any)
-        .allow_headers(Any);
-
-    let layer = ServiceBuilder::new()
-        .layer(GrpcWebLayer::new()) // 👈 Layer applied here
-        .layer(CorsLayer::permissive()); // optional: CORS for browser use
-
-    println!("gRPC-Web proxy running at http://{}", addr);
-
-    Server::builder()
-        .accept_http1(true) // 👈 Required for grpc-web
-        .layer(layer)
+    // gRPC-Web + CORS layers applied
+    let svc = tonic::transport::Server::builder()
+        .accept_http1(true) // required for grpc-web
+        .layer(
+            ServiceBuilder::new()
+                .layer(GrpcWebLayer::new())
+                // .layer(CorsLayer::permissive()), // Or your custom CORS
+        )
         .add_service(anchor_service)
-        .add_service(verify_service)
-        .serve(addr)
-        .await?;
+        .add_service(verify_service);
+
+    println!("✅ gRPC-Web proxy listening at http://{}", addr);
+    svc.serve(addr).await?;
 
     Ok(())
 }

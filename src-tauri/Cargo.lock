@@ -1529,7 +1529,7 @@ dependencies = [
 
 [[package]]
 name = "gui"
-version = "0.1.0"
+version = "0.3.0-alpha"
 dependencies = [
  "prost",
  "serde",
@@ -4894,7 +4894,7 @@ dependencies = [
 
 [[package]]
 name = "validblock-core"
-version = "0.1.0"
+version = "0.3.0-alpha"
 dependencies = [
  "chrono",
  "prost",
@@ -4909,7 +4909,7 @@ dependencies = [
 
 [[package]]
 name = "validblock-hasher"
-version = "0.1.0"
+version = "0.3.0-alpha"
 dependencies = [
  "sha2",
  "validblock-types",
@@ -4917,7 +4917,7 @@ dependencies = [
 
 [[package]]
 name = "validblock-storage"
-version = "0.1.0"
+version = "0.3.0-alpha"
 dependencies = [
  "rusqlite",
  "validblock-types",
@@ -4925,7 +4925,7 @@ dependencies = [
 
 [[package]]
 name = "validblock-types"
-version = "0.1.0"
+version = "0.3.0-alpha"
 dependencies = [
  "serde",
  "thiserror 1.0.69",
@@ -4933,7 +4933,7 @@ dependencies = [
 
 [[package]]
 name = "validblock-wallet"
-version = "0.1.0"
+version = "0.3.0-alpha"
 dependencies = [
  "bitcoin",
  "validblock-types",

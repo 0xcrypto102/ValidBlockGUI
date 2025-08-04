@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AnchorRequest, AnchorResponse, VerifyRequest, VerifyResponse } from "./validblock_pb.ts";
+import { AnchorRequest, AnchorResponse, ExistDigestRequest, ExistDigestResponse, VerifyRequest, VerifyResponse } from "./validblock_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -37,6 +37,17 @@ export const VerifyService = {
       name: "Verify",
       I: VerifyRequest,
       O: VerifyResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * 👈 New RPC
+     *
+     * @generated from rpc validblock.VerifyService.ExistDigest
+     */
+    existDigest: {
+      name: "ExistDigest",
+      I: ExistDigestRequest,
+      O: ExistDigestResponse,
       kind: MethodKind.Unary,
     },
   }

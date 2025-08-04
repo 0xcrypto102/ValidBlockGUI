@@ -5,6 +5,11 @@ export default function SettingsPane() {
   const [anchorPolicy, setAnchorPolicy] = useState('LocalOnly');
   const [trinity, setTrinity] = useState(false);
   const [rpcEndpoint, setRpcEndpoint] = useState('http://127.0.0.1:8080');
+  const [darkMode, setDarkMode] = useState(
+    document.documentElement.classList.contains('dark'),
+  );
+    
+  const [walletId, setWalletId] = useState('');
 
   useEffect(() => {
     const getSetting = async() => {
@@ -13,6 +18,7 @@ export default function SettingsPane() {
         setRpcEndpoint(res.rpc_endpoint);
         setAnchorPolicy(res.default_policy);
         setTrinity(res.trinity_mode);
+        setWalletId(res.wallet_id);
       });
     }
     getSetting();
@@ -23,7 +29,8 @@ export default function SettingsPane() {
       newSettings: {
         rpc_endpoint: rpcEndpoint,
         default_policy: anchorPolicy,
-        wallet_id: '',
+        wallet_id: walletId,
+        dark_mode: darkMode,
         trinity_mode: trinity,
       }
     });
@@ -69,6 +76,32 @@ export default function SettingsPane() {
           onBlur={updateSettings}
           className="w-full p-2 rounded-md text-black border-1 border-solid border-black"
         />
+      </div>
+
+      <div>
+        <label className="block mb-1 text-sm font-semibold text-black">Wallet&nbsp;ID</label>
+        <input
+          type="text"
+          value={walletId}
+          onChange={(e) => setWalletId(e.target.value)}
+          onBlur={updateSettings}
+          className="w-full p-2 rounded-md text-black border-1 border-solid border-black"
+        />
+      </div>
+
+      <div>
+        <label className="flex items-center gap-2 text-black">
+          <input
+            type="checkbox"
+            checked={darkMode}
+            onChange={(e) => {
+              setDarkMode(e.target.checked);
+              document.documentElement.classList.toggle('dark', e.target.checked);
+              updateSettings();
+            }}
+          />
+          Dark mode
+        </label>
       </div>
     </section>
   );

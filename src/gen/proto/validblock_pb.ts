@@ -222,3 +222,79 @@ export class VerifyResponse extends Message<VerifyResponse> {
   }
 }
 
+/**
+ * @generated from message validblock.ExistDigestRequest
+ */
+export class ExistDigestRequest extends Message<ExistDigestRequest> {
+  /**
+   * hex or base64 encoded Digest256
+   *
+   * @generated from field: string digest = 1;
+   */
+  digest = "";
+
+  constructor(data?: PartialMessage<ExistDigestRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "validblock.ExistDigestRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "digest", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ExistDigestRequest {
+    return new ExistDigestRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ExistDigestRequest {
+    return new ExistDigestRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ExistDigestRequest {
+    return new ExistDigestRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ExistDigestRequest | PlainMessage<ExistDigestRequest> | undefined, b: ExistDigestRequest | PlainMessage<ExistDigestRequest> | undefined): boolean {
+    return proto3.util.equals(ExistDigestRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message validblock.ExistDigestResponse
+ */
+export class ExistDigestResponse extends Message<ExistDigestResponse> {
+  /**
+   * @generated from field: bool exists = 1;
+   */
+  exists = false;
+
+  constructor(data?: PartialMessage<ExistDigestResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "validblock.ExistDigestResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "exists", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ExistDigestResponse {
+    return new ExistDigestResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ExistDigestResponse {
+    return new ExistDigestResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ExistDigestResponse {
+    return new ExistDigestResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ExistDigestResponse | PlainMessage<ExistDigestResponse> | undefined, b: ExistDigestResponse | PlainMessage<ExistDigestResponse> | undefined): boolean {
+    return proto3.util.equals(ExistDigestResponse, a, b);
+  }
+}
+

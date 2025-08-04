@@ -1,6 +1,6 @@
 [package]
 name = "gui"
-version = "0.1.0"
+version = "0.3.0-alpha"
 description = "A Tauri App"
 authors = ["you"]
 edition = "2021"
@@ -38,4 +38,4 @@ validblock-storage = { path = "../validblock/crates/storage" }
 validblock-wallet = { path = "../validblock/crates/wallet" }
 validblock-types = { path = "../validblock/crates/types" }
 validblock-hasher = { path = "../validblock/crates/hasher" }
-tower-http = "0.6.6"
+tower-http = { version = "0.6.6", features = ["cors"] }

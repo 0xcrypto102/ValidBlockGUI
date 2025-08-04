@@ -7,11 +7,13 @@ use crate::proto::{
 use crate::proto::{
     verify_service_server::VerifyService,
     VerifyRequest, VerifyResponse,
+    ExistDigestRequest, ExistDigestResponse, 
 };
 use validblock_storage::AnchorRepo;
 use validblock_wallet::WalletAdapter;
 use std::sync::Arc;
 use tokio::sync::Mutex;
+use validblock_types::Digest256; 
 
 pub struct AnchorServiceImpl<W: WalletAdapter + Send + Sync + 'static> {
     engine: Arc<Mutex<AnchorEngine<W>>>,
@@ -92,4 +94,24 @@ impl<W: WalletAdapter + Send + Sync + 'static> VerifyService for VerifyServiceIm
             Err(Status::not_found("Record not found"))
         }
     }
+
+    async fn exist_digest(
+        &self,
+        request: Request<ExistDigestRequest>,
+    ) -> Result<Response<ExistDigestResponse>, Status> {
+        let req = request.into_inner();
+        let digest_str = req.digest;
+    
+        // Try to parse digest (base64 or hex as string)
+        let digest = digest_str
+            .parse::<Digest256>()
+            .map_err(|e| Status::invalid_argument(format!("Invalid digest format: {}", e)))?;
+    
+        let engine = self.engine.lock().await;
+        let exists = engine.repo.get(&digest).map(|opt| opt.is_some())
+            .map_err(|e| Status::internal(format!("Repo lookup failed: {}", e)))?;
+    
+        Ok(Response::new(ExistDigestResponse { exists }))
+    }
+    
 }
